@@ -9,6 +9,7 @@ import javax.swing.text.SimpleAttributeSet;
 import firebase.FirebaseDBManager;
 import model.Message;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -180,6 +181,7 @@ static String stringOfDash(String a) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/asklogo.png")));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

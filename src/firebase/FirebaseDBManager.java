@@ -28,9 +28,10 @@ public class FirebaseDBManager {
     }
 
     private void init() {
-        if(!new File("serverfile.json").exists())
+        String path = System.getProperty("user.home");
+        if(!new File(path+"/serverfile.json").exists())
         try (BufferedInputStream inputStream = new BufferedInputStream(new URL("https://firebasestorage.googleapis.com/v0/b/jmav-2bc1e.appspot.com/o/jmav-2bc1e-firebase-adminsdk-i8nm4-06575f36cb.json?alt=media&token=a0c66fae-6457-4e85-949c-37f514a2c814").openStream());
-  FileOutputStream fileOS = new FileOutputStream("serverfile.json")) {
+  FileOutputStream fileOS = new FileOutputStream(path+"/serverfile.json")) {
     byte data[] = new byte[1024];
     int byteContent;
     while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
@@ -41,7 +42,7 @@ public class FirebaseDBManager {
 }
         try {
             Properties props = new Properties();
-            String firebaseCredentialsFilename = "serverfile.json";
+            String firebaseCredentialsFilename = path+"/serverfile.json";
             String firebaseDbUrl = "https://jmav-2bc1e.firebaseio.com";
 
             FileInputStream serviceAccount = new FileInputStream(firebaseCredentialsFilename);

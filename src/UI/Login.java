@@ -5,7 +5,12 @@
  */
 package UI;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +24,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         ok.setEnabled(false);
-        URL url;
+        
+        
         
     
     }
@@ -43,6 +49,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
         setAlwaysOnTop(true);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/asklogo.png")));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -74,7 +81,7 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setText("Welcome To AskChat");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(109, 17, -1, -1));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/asklogo-black (1).png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/asklogo.png"))); // NOI18N
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(93, 45, 174, 132));
 
         backg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/giphy (1).gif"))); // NOI18N

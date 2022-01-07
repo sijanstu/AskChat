@@ -3,6 +3,6 @@ src/jmav-2bc1e-firebase-adminsdk-i8nm4-06575f36cb.json
 src/settings.xml
 jmav-2bc1e-firebase-adminsdk-i8nm4-06575f36cb.json
 settings.xml
-build
-dist
+build/
+dist/
 serverfile.json

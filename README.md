@@ -17,8 +17,8 @@ Clone above codes
 
 Screenshots:
 
-![alt text](https://github.com/sijanstu/AskChat/blob/main/screenshots/s1.PNG?raw=true)
+![alt text](https://github.com/sijanstu/AskChat/blob/main/screenshots/s1.png?raw=true)
 
 
-![alt text](https://github.com/sijanstu/AskChat/blob/main/screenshots/s2.PNG?raw=true)
+![alt text](https://github.com/sijanstu/AskChat/blob/main/screenshots/s2.png?raw=true)
 

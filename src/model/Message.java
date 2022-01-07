@@ -1,4 +1,4 @@
-package gr.istl.collaborativechat.model;
+package model;
 public class Message{
 
     private  String text;

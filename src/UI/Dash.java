@@ -1,4 +1,4 @@
-package gr.istl.collaborativechat.ui;
+package UI;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -6,8 +6,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import javax.swing.text.SimpleAttributeSet;
-import gr.istl.collaborativechat.firebase.FirebaseDBManager;
-import gr.istl.collaborativechat.model.Message;
+import firebase.FirebaseDBManager;
+import model.Message;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -38,6 +38,7 @@ public final class Dash extends javax.swing.JFrame {
         setupDBReferences();
         goOnline();
         addWindowListener(new WindowAdapter() {
+            
             @Override
             public void windowClosing(WindowEvent e) {
                 goOffline();

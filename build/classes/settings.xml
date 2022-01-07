@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="firebase_db_url">enter_firebase_db_url_here</entry>
+    <entry key="firebase_admin_sdk_service_key_filename">enter_firebase_admin_sdk_service_key_filename_here</entry>
+</properties>

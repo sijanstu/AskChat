@@ -4,7 +4,6 @@ src/settings.xml
 jmav-2bc1e-firebase-adminsdk-i8nm4-06575f36cb.json
 settings.xml
 build/
-/dist
-/dist/lib
+dist
 serverfile.json
 build/built-jar.properties

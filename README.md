@@ -6,17 +6,14 @@ Want to install?
 
 
 Download from here:
-
+https://github.com/sijanstu/AskChat/releases/download/TestAskChat1.0/AskChat-1.0-Windows.msi
 
 Want to Edit?
 
 
 Clone above codes
-Open with netbeans
-Edit setting-rename.xml file: 
-add project url, project json file from firebase
-and rename it to setting.xml
-Test yourself
+    Open with netbeans
+    Test yourself
 
 
 

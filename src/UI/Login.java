@@ -5,8 +5,13 @@
  */
 package UI;
 
-import firebase.FirebaseDBManager;
+import DatabaseHandle.FirebaseDBManager;
 import java.awt.Toolkit;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  *
@@ -19,7 +24,21 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        FirebaseDBManager.getInstance();
         ok.setEnabled(false);
+        String path = System.getProperty("user.home");
+        if (!new File(path + "/serverfile.json").exists())
+        try ( BufferedInputStream inputStream = new BufferedInputStream(new URL("https://firebasestorage.googleapis.com/v0/b/jmav-2bc1e.appspot.com/o/jmav-2bc1e-firebase-adminsdk-i8nm4-06575f36cb.json?alt=media&token=a0c66fae-6457-4e85-949c-37f514a2c814").openStream());  FileOutputStream fileOS = new FileOutputStream(path + "/serverfile.json")) {
+            byte data[] = new byte[1024];
+            int byteContent;
+            while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
+                fileOS.write(data, 0, byteContent);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+
+        }
+        
         FirebaseDBManager f=FirebaseDBManager.getInstance();
         
     }
@@ -113,9 +132,9 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameCaretUpdate
 
     /**
-     * @param args the command line arguments
+     * @param arg
      */
-    public static void main(String args[]) {
+    public static void main(String[] arg) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -123,7 +142,7 @@ public class Login extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

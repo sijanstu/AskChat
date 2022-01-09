@@ -6,7 +6,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import javax.swing.text.SimpleAttributeSet;
-import firebase.FirebaseDBManager;
+import DatabaseHandle.FirebaseDBManager;
 import model.Message;
 import java.awt.Color;
 import java.awt.Toolkit;

@@ -1,4 +1,4 @@
-package firebase;
+package DatabaseHandle;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -18,30 +18,19 @@ import java.util.Properties;
  *
  * @author Antonis
  */
-public class FirebaseDBManager {
+public  class FirebaseDBManager {
 
-    private FirebaseDatabase database = null;
+    private static FirebaseDatabase database = null;
     private static FirebaseDBManager instance = null;
 
     public FirebaseDBManager() {
         init();
     }
 
-    private void init() {
+    private static void init() {
         String path = System.getProperty("user.home");
-        if (!new File(path + "/serverfile.json").exists())
-        try ( BufferedInputStream inputStream = new BufferedInputStream(new URL("https://firebasestorage.googleapis.com/v0/b/jmav-2bc1e.appspot.com/o/jmav-2bc1e-firebase-adminsdk-i8nm4-06575f36cb.json?alt=media&token=a0c66fae-6457-4e85-949c-37f514a2c814").openStream());  FileOutputStream fileOS = new FileOutputStream(path + "/serverfile.json")) {
-            byte data[] = new byte[1024];
-            int byteContent;
-            while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
-                fileOS.write(data, 0, byteContent);
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-
-        }
-        try {
-            Properties props = new Properties();
+            try {
+           // Properties props = new Properties();
             String firebaseCredentialsFilename = path + "/serverfile.json";
             String firebaseDbUrl = "https://jmav-2bc1e.firebaseio.com/";
 
@@ -72,7 +61,7 @@ public class FirebaseDBManager {
         return instance;
     }
 
-    public DatabaseReference getDBRef(String path) {
+    public static DatabaseReference getDBRef(String path) {
         return database.getReference(path);
     }
 }

@@ -15,6 +15,10 @@ Clone above codes
     Open with netbeans
     Test yourself
 
+Screenshots:
+
+![alt text](https://github.com/sijanstu/AskChat/blob/main/screenshots/s1.png?raw=true)
 
 
+![alt text](https://github.com/sijanstu/AskChat/blob/main/screenshots/s2.png?raw=true)
 

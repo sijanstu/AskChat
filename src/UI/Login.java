@@ -5,12 +5,8 @@
  */
 package UI;
 
-import java.awt.Image;
+import firebase.FirebaseDBManager;
 import java.awt.Toolkit;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -24,10 +20,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         ok.setEnabled(false);
+        FirebaseDBManager f=FirebaseDBManager.getInstance();
         
-        
-        
-    
     }
 
     /**

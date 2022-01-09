@@ -7,3 +7,4 @@ build/**
 dist/lib/**
 serverfile.json
 build/built-jar.properties
+/dist/

@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import javax.swing.text.SimpleAttributeSet;
 import DatabaseHandle.FirebaseDBManager;
+import TrayHide.Tray;
 import model.Message;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -19,45 +20,50 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import model.Person;
 
 public final class Dash extends javax.swing.JFrame {
-
-    static String username;
     private SimpleAttributeSet localUserAttributeSet;
     private SimpleAttributeSet otherUsersAttributeSet;
     private SimpleAttributeSet authorAttributeSet;
 
-    private DatabaseReference dbRefOnlineUsersCounter;
+    private static DatabaseReference dbRefOnlineUsersCounter;
     private DatabaseReference dbRefMessages;
-
+    String username;
     public Dash() {
         initComponents();
+        adduser();
+        username=Person.USERNAME;
         initAttributeSets();
         send.setEnabled(false);
         setTitle("AskChat");
-        user.setText(username + "'s AskChat");
+        usertitle.setText(Person.USERNAME+ "'s AskChat");
         setupDBReferences();
         goOnline();
         addWindowListener(new WindowAdapter() {
             
             @Override
             public void windowClosing(WindowEvent e) {
-                goOffline();
+                Tray.displayInfo("AskChat","Minimized to tray"); 
+                //Tray.isopen=false;
             }
         });
         DefaultCaret caret = (DefaultCaret)pane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
+        
     }
-
+    void adduser(){
+        DatabaseReference adduserobj =FirebaseDBManager.getDBRef("/AskChat/Users");;
+        adduserobj.child(Person.USERNAME).setValueAsync(Person.Email);
+    }
     void goOnline() {
+        
         dbRefOnlineUsersCounter.child(username).setValueAsync(true);
     }
 
-    public void goOffline() {
-        dbRefOnlineUsersCounter.child(username).removeValueAsync();
+    public static void goOffline() {
+        dbRefOnlineUsersCounter.child(Person.USERNAME).removeValueAsync();
     }
-
     public void sendMessage(Message message) {
         DatabaseReference newMessageRef = dbRefMessages.push();
         newMessageRef.setValueAsync(message);
@@ -69,7 +75,7 @@ static String stringOfDash(String a) {
         return string;
     }
     void appendMessageLocally(Message message) {
-        boolean messageSentByLocalUser = message.getAuthor().equals(Dash.username);
+        boolean messageSentByLocalUser = message.getAuthor().equals(username);
 
         SimpleAttributeSet as = messageSentByLocalUser ? localUserAttributeSet : otherUsersAttributeSet;
         StyledDocument doc = pane.getStyledDocument();
@@ -97,17 +103,15 @@ static String stringOfDash(String a) {
     private String emptyLine() {
         return "    \n\n";
     }
-
+int fl=1;
     private void setupDBReferences() {
-        FirebaseDBManager dbManager = FirebaseDBManager.getInstance();
+        FirebaseDBManager.getInstance();
 
-        dbRefOnlineUsersCounter = dbManager.getDBRef("/session1/onlineUsers");
+        dbRefOnlineUsersCounter = FirebaseDBManager.getDBRef("/AskChat/onlineUsers");
         dbRefOnlineUsersCounter.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot data) {
                 live.setText("Online:" + data.getChildrenCount());
-                //updateLabelUsersCounter((int) data.getChildrenCount());
-                //System.out.println(data.getChildrenCount());
             }
 
             @Override
@@ -115,15 +119,21 @@ static String stringOfDash(String a) {
             }
         });
 
-        dbRefMessages = dbManager.getDBRef("/session1/messages");
-        System.out.println(dbRefMessages.toString());
+        dbRefMessages = FirebaseDBManager.getDBRef("/AskChat/messages");
+        //System.out.println(dbRefMessages.toString());
+        
         dbRefMessages.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot data, String prevChildKey) {
+                
                 HashMap<String, String> messageObj = (HashMap<String, String>) data.getValue();
+                
                 String text = messageObj.get("text");
                 String author = messageObj.get("author");
                 appendMessageLocally(new Message(text, author));
+                if(fl==0)
+                    if(!author.equals(Person.USERNAME))
+                        Tray.displayInfo(author, text);
             }
 
             @Override
@@ -168,21 +178,25 @@ static String stringOfDash(String a) {
         pane = new javax.swing.JTextPane();
         mess = new rojeru_san.rsfield.RSTextFullBD();
         send = new rojeru_san.rsbutton.RSButtonRoundEffect();
-        user = new javax.swing.JLabel();
+        usertitle = new javax.swing.JLabel();
         live = new javax.swing.JLabel();
+        usertitle1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/asklogo.png")));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 153, 255)));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pane.setEditable(false);
         pane.setBorder(null);
         pane.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jScrollPane1.setViewportView(pane);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 34, 473, 490));
 
         mess.setPlaceholder("Your Message");
         mess.addCaretListener(new javax.swing.event.CaretListener() {
@@ -190,11 +204,17 @@ static String stringOfDash(String a) {
                 messCaretUpdate(evt);
             }
         });
+        mess.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                messFocusGained(evt);
+            }
+        });
         mess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 messActionPerformed(evt);
             }
         });
+        jPanel1.add(mess, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 530, 369, 51));
 
         send.setText("Send");
         send.addActionListener(new java.awt.event.ActionListener() {
@@ -202,47 +222,25 @@ static String stringOfDash(String a) {
                 sendActionPerformed(evt);
             }
         });
+        jPanel1.add(send, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 535, 98, -1));
 
-        user.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        user.setForeground(new java.awt.Color(51, 153, 255));
-        user.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        user.setText("User's AskChat");
+        usertitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        usertitle.setForeground(new java.awt.Color(51, 153, 255));
+        usertitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        usertitle.setText("User's AskChat");
+        jPanel1.add(usertitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 270, 30));
 
-        live.setForeground(new java.awt.Color(51, 102, 255));
-        live.setText("Online");
+        live.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        live.setForeground(new java.awt.Color(0, 153, 0));
+        live.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        live.setText("Online Users");
+        jPanel1.add(live, new org.netbeans.lib.awtextra.AbsoluteConstraints(299, 1, 160, 30));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(mess, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(send, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 10, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(user, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(live, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(user, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(live))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mess, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(send, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        );
+        usertitle1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        usertitle1.setForeground(new java.awt.Color(255, 51, 0));
+        usertitle1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        usertitle1.setText("AskChat");
+        jPanel1.add(usertitle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 80, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -278,17 +276,20 @@ static String stringOfDash(String a) {
 
     private void messActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messActionPerformed
         if (mess.getText().equals("")) {
-
         } else {
-
+            send.doClick();
         }
     }//GEN-LAST:event_messActionPerformed
 
-    /**
-     * @param name
-     */
-    public static void main(String name) {
-        username = name;
+    private void messFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_messFocusGained
+fl=0;        // TODO add your handling code here:
+    }//GEN-LAST:event_messFocusGained
+    public void logout(){
+        this.goOffline();
+        Person.logout(this);
+        this.dispose();
+    }    Tray tr;
+    public void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -313,7 +314,7 @@ static String stringOfDash(String a) {
             new Dash().setVisible(true);
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -321,6 +322,7 @@ static String stringOfDash(String a) {
     private rojeru_san.rsfield.RSTextFullBD mess;
     private javax.swing.JTextPane pane;
     private rojeru_san.rsbutton.RSButtonRoundEffect send;
-    private javax.swing.JLabel user;
+    private javax.swing.JLabel usertitle;
+    private javax.swing.JLabel usertitle1;
     // End of variables declaration//GEN-END:variables
 }

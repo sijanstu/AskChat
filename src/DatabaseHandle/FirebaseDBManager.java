@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import model.Person;
 
 public class FirebaseDBManager {
 
@@ -18,7 +19,7 @@ public class FirebaseDBManager {
         init();
     }
     private static void init() {
-        String path = System.getProperty("user.home");
+        String path = Person.path;
             try {
             String firebaseCredentialsFilename = path + "/serverfile.json";
             String firebaseDbUrl = "https://jmav-2bc1e.firebaseio.com/";

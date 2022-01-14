@@ -1,12 +1,12 @@
 # AskChat
-
-
 Fastest Chat App with Firebase
+
 Want to install?
 
 
 Download from here:
 https://github.com/sijanstu/AskChat/releases/download/TestAskChat1.0/AskChat-1.0-Windows.msi
+
 
 Want to Edit?
 

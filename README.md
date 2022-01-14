@@ -5,7 +5,7 @@ Want to install?
 
 
 Download from here:
-https://github.com/sijanstu/AskChat/releases/download/TestAskChat1.0/AskChat-1.0-Windows.msi
+https://github.com/sijanstu/AskChat/releases/download/V.2.0/AskChat-1.0-Windows.msi
 
 
 Want to Edit?
